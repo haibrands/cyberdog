@@ -55,14 +55,16 @@ def web_server_check(ip): #Checks if port 80 is open.
     x = ''
     print ("\n\033[96mPlease wait... checking if a web server is running...\033[0m")
     cmd = "nmap -p 80 " + ip
-    output = subprocess.check_output(cmd, shell = True)
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     port_80_scan = change_output.replace('\\n','\n')
     for line in port_80_scan.splitlines():
-        if 'open' in line:
+        port_80 = ['open']
+        port_80_open = any(ele in line for ele in port_80)
+        if port_80_open == True:
             return True
-        else:
-            return False
+            break
+    return False
 
 def nikto_ws(): #Asks user if they want a nikto scan to run.
     answer = input("Did you want to run a nikto scan if a web server is detected? This would take a long time. (Y/N): ")
@@ -86,7 +88,7 @@ def nmap_scan_synscan(ip): #SYN (Stealth) Scan, default and popular scan. It's q
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"syn_scan")
-    print("SYN Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/syn_scan.txt")
+    print("SYN Scan Complete! While you're waiting on the other scans, you can view the details for this scan at './individual_scans/syn_scan.txt'")
 
 def nmap_scan_allports(ip): #All Ports Scan, scans all ports.
     scan = "nmap -p-"
@@ -96,7 +98,7 @@ def nmap_scan_allports(ip): #All Ports Scan, scans all ports.
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"all_ports_scan")
-    print("All Port Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/all_ports_scan.txt")
+    print("All Ports Scan Complete! While you're waiting on the other scans, you can view the details for this scan at './individual_scans/all_ports_scan.txt'")
 
 def nmap_scan_serviceversion(ip): #Service-version, Default Scripts, OS Scan, used to detect the OS and services running on open ports.
     scan = "nmap -sV -sC -O -p 111,222,333"
@@ -106,7 +108,7 @@ def nmap_scan_serviceversion(ip): #Service-version, Default Scripts, OS Scan, us
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"service_version_os_scan")
-    print("Service-Version Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/service_version_os_scan.txt")
+    print("Service-Version Scan Complete! While you're waiting on the other scans, you can view the details for this scan at './individual_scans/service_version_os_scan.txt'")
 
 def nmap_scan_udp(ip): #UDP Scan, scans for UDP ports.
     scan = "nmap -sU"
@@ -116,7 +118,7 @@ def nmap_scan_udp(ip): #UDP Scan, scans for UDP ports.
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"udp_scan")
-    print("UDP Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/udp_scan.txt")
+    print("UDP Scan Complete! While you're waiting on the other scans, you can view the details for this scan at './individual_scans/udp_scan.txt'")
 
 def nmap_scan_tcp(ip): #TCP Scan, scans for TCP ports.
     scan = "nmap -sT"
@@ -126,15 +128,7 @@ def nmap_scan_tcp(ip): #TCP Scan, scans for TCP ports.
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"tcp_scan")
-    print("TCP Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/tcp_scan.txt")
-
-def nikto_scan(ip): #Nikto Scan, used for webservers to find dangerous files/CGIs, outdated server software and other problems.
-    print (waiting("nikto"))
-    cmd = "nikto -h http://" + ip
-    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
-    change_output = str(output)
-    x = change_output.replace('\\n','\n')
-    individual_scans(x,"nikto_scan")
+    print("TCP Scan Complete! While you're waiting on the other scans, you can view the details for this scan at './individual_scans/tcp_scan.txt'")
 
 def dirb_scan(ip): #DirBuster Scan, directory buster scan for web servers. 
     print (waiting("dirb"))
@@ -143,7 +137,15 @@ def dirb_scan(ip): #DirBuster Scan, directory buster scan for web servers.
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"dirb_scan")
-    print("Dirb Scan Complete! You can view the details for this report at /individual_scans/dirb_scan")
+    print("Dirb Scan Complete! You can view the details for this report at './individual_scans/dirb_scan'")
+
+def nikto_scan(ip): #Nikto Scan, used for webservers to find dangerous files/CGIs, outdated server software and other problems.
+    print (waiting("nikto"))
+    cmd = "nikto -h http://" + ip
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, universal_newlines=True).communicate()[0]
+    change_output = str(output)
+    x = change_output.replace('\\n','\n')
+    individual_scans(x,"nikto_scan")
 
 def scan_report(ip): #Output scan results with the following information: DNS-Domain name, Host name, OS, Server, Kernel, Workgroup, Windows domain, ports open, services open
 #Emphasize following ports in this order, with tips:
