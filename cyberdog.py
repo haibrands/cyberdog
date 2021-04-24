@@ -216,8 +216,8 @@ def main(): #Everything that you want the main function to do
     if port_80 == 'open':
         if nikto_answer == 'y':
             print ("\033[32mA web server was found, running nikto and dirb scans now...\n\033[0m")
-            nikto_scan(target)
             dirb_scan(target)
+            nikto_scan(target)
         else:
             print ("\033[32mA web server was found, running dirb scan now...\n\033[0m")
             dirb_scan(target)
