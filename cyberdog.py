@@ -47,7 +47,7 @@ def waiting(scan): #Lets user know the scan is running.
     return ("\033[96mPlease wait... " + scan + " scan running...\033[0m")
 
 def individual_scans(input,scan): #Outputs each scan to a .txt file as well
-    f = open("./individual_scans/" + scan + ".txt", "a+")
+    f = open("./individual_scans/" + scan + ".txt", "w")
     f.write(input)
     f.close()
 
@@ -86,6 +86,7 @@ def nmap_scan_synscan(ip): #SYN (Stealth) Scan, default and popular scan. It's q
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"syn_scan")
+    print("SYN Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/syn_scan.txt")
 
 def nmap_scan_allports(ip): #All Ports Scan, scans all ports.
     scan = "nmap -p-"
@@ -95,6 +96,7 @@ def nmap_scan_allports(ip): #All Ports Scan, scans all ports.
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"all_ports_scan")
+    print("All Port Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/all_ports_scan.txt")
 
 def nmap_scan_serviceversion(ip): #Service-version, Default Scripts, OS Scan, used to detect the OS and services running on open ports.
     scan = "nmap -sV -sC -O -p 111,222,333"
@@ -104,15 +106,17 @@ def nmap_scan_serviceversion(ip): #Service-version, Default Scripts, OS Scan, us
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"service_version_os_scan")
+    print("Service-Version Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/service_version_os_scan.txt")
 
 def nmap_scan_udp(ip): #UDP Scan, scans for UDP ports.
     scan = "nmap -sU"
     print (waiting(scan))
-    cmd = "nmap --top-ports 50 " + ip + " -sU"
+    cmd = "nmap --top-ports 50 -sU " + ip
     output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"udp_scan")
+    print("UDP Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/udp_scan.txt")
 
 def nmap_scan_tcp(ip): #TCP Scan, scans for TCP ports.
     scan = "nmap -sT"
@@ -122,6 +126,7 @@ def nmap_scan_tcp(ip): #TCP Scan, scans for TCP ports.
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"tcp_scan")
+    print("TCP Scan Complete! While you're waiting on the other scans, you can view the details for this scan at /individual_scans/tcp_scan.txt")
 
 def nikto_scan(ip): #Nikto Scan, used for webservers to find dangerous files/CGIs, outdated server software and other problems.
     print (waiting("nikto"))
@@ -138,10 +143,48 @@ def dirb_scan(ip): #DirBuster Scan, directory buster scan for web servers.
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"dirb_scan")
+    print("Dirb Scan Complete! You can view the details for this report at /individual_scans/dirb_scan")
 
-#def scan_report(): #Output scan results with the following information: DNS-Domain name, Host name, OS, Server, Kernel, Workgroup, Windows domain, ports open, services open
+def scan_report(ip): #Output scan results with the following information: DNS-Domain name, Host name, OS, Server, Kernel, Workgroup, Windows domain, ports open, services open
 #Emphasize following ports in this order, with tips:
 #21 - FTP, 22 - SSH, 25 - SMTP, 69 - UDP - TFTP, 110 - POP3, 111 - rpcbind, 135 - MSRPC, 143 - IMAP, 139/445 - SMB, 161/162 - SNMP, 554 - RTSP, 1521 - Oracle, 2049 - NFS, 2100 - Oracle XML DB, 3306 - MySQL, 3339 - Oracle Web Interface, 80 - Web Server, 443 - HTTPS
+    f = open("report.txt","w")
+    f1 = open("./individual_scans/all_ports_scan.txt")
+    new_x = ''
+    for line in f1.readlines():
+        ports = ['PORT', 'tcp', 'udp']
+        open_ports = any(ele in line for ele in ports)
+        if open_ports == True:
+            new_x = new_x + line
+    f.write("ALL PORT SCAN REPORT FOR " + ip + "\n----------------------------------------- \n" + new_x)
+    f1.close()
+    f2 = open("./individual_scans/tcp_scan.txt")
+    new_x1 = ''
+    for line in f2.readlines():
+        ports = ['PORT', 'tcp']
+        open_ports = any(ele in line for ele in ports)
+        if open_ports == True:
+            new_x1 = new_x1 + line
+    f.write("\nTCP PORT SCAN REPORT FOR " + ip + "\n----------------------------------------- \n" + new_x1)
+    f2.close()
+    f3 = open("./individual_scans/udp_scan.txt")
+    new_x2 = ''
+    for line in f3.readlines():
+        ports = ['PORT', 'udp']
+        open_ports = any(ele in line for ele in ports)
+        if open_ports == True:
+            new_x2 = new_x2 + line
+    f.write("\nUDP PORT SCAN REPORT FOR " + ip + "\n----------------------------------------- \n" + new_x2)
+    f3.close()
+    f4 = open("./individual_scans/service_version_os_scan.txt")
+    new_x3 = ''
+    for line in f4.readlines():
+        ports = ['VERSION', 'version', 'udp', 'rpcinfo:', 'tcp', 'OS CPE', 'OS details']
+        open_ports = any(ele in line for ele in ports)
+        if open_ports == True:
+            new_x2 = new_x2 + line
+    f.write("\nVERSION AND OS SCAN REPORT FOR " + ip + "\n---------------------------------------------- \n" + new_x2)
+    f4.close()
 
 
 def main(): #Everything that you want the main function to do
@@ -187,6 +230,7 @@ def main(): #Everything that you want the main function to do
         if os.path.exists("./individual_scans/nikto_scan.txt"):
             os.remove("./individual_scans/nikto_scan.txt")
     print ("\nFinished.")
+    scan_report(target)
 
 
 if __name__=='__main__':
