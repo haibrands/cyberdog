@@ -64,14 +64,14 @@ def web_server_check(ip): #Checks if port 80 is open.
         x = 'closed'
     return x
 
-def nikto_ws():
+def nikto_ws(): #Asks user if they want a nikto scan to run.
     answer = input("Did you want to run a nikto scan if a web server is detected? This would take a long time. (Y/N): ")
     if answer.lower() == 'y':
         return 'y'
     elif answer.lower() == 'n':
         return 'n'
 
-def nikto_checker(answer):
+def nikto_checker(answer): #Checks if the answer is a valid Yes or No.
     if answer == 'y':
         return True
     elif answer == 'n':
