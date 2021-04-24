@@ -58,11 +58,11 @@ def web_server_check(ip): #Checks if port 80 is open.
     output = subprocess.check_output(cmd, shell = True)
     change_output = str(output)
     port_80_scan = change_output.replace('\\n','\n')
-    if port_80_scan.find('open'):
-        x = 'open'
-    else:
-        x = 'closed'
-    return x
+    for line in port_80_scan.splitlines():
+        if 'open' in line:
+            return True
+        else:
+            return False
 
 def nikto_ws(): #Asks user if they want a nikto scan to run.
     answer = input("Did you want to run a nikto scan if a web server is detected? This would take a long time. (Y/N): ")
@@ -213,9 +213,9 @@ def main(): #Everything that you want the main function to do
     nmap_scan_udp(target)
     nmap_scan_tcp(target)
     port_80 = web_server_check(target)
-    if port_80 == 'open':
+    if port_80 == True:
         if nikto_answer == 'y':
-            print ("\033[32mA web server was found, running nikto and dirb scans now...\n\033[0m")
+            print ("\033[32mA web server was found, running dirb and nikto scans now...\n\033[0m")
             dirb_scan(target)
             nikto_scan(target)
         else:
