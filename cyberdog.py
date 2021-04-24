@@ -20,7 +20,7 @@ import subprocess
 
 def opening(): #Opening function with introduction of the script along with the various scans used.
     print ("\n\n       /^-^\        _____           _                     _____                      /^-----^\ \n      / o o \      / ____|         | |                   |  __ \                     V  o o  V \n     /   Y   \    | |       _   _  | |__     ___   _ __  | |  | |   ___     __ _      |  Y  | \n     V \ v / V    | |      | | | | | '_ \   / _ \ | '__| | |  | |  / _ \   / _` |      \ Q / \n       / - \      | |____  | |_| | | |_) | |  __/ | |    | |__| | | (_) | | (_| |      / - \ \n      /    |       \_____|  \__, | |_.__/   \___| |_|    |_____/   \___/   \__, |      |    \ \n(    /     |                 __/ |                                          __/ |      |     \     ) \n ===/___) ||                |___/                                          |___/       || (___\==== \n")
-    print ("\n\nWelcome to Cyberdog! This is a reconnaissance script that utilizes the following scans: \n1) nmap \n2) nikto \n3) dirb")
+    print ("\n\nWelcome to CyberDog! This is a reconnaissance script that utilizes the following scans: \n1) nmap \n2) nikto \n3) dirb")
     print ("\nThis program can take a long time! The UDP scan has been limited to the top 50 ports. You also have the option to disable the nikto scan which would take the longest.")
     print ("\nYou can find a final report meant to assist in enumerating boxes at './report.txt'. You can also find each individual scan in the './individual_scans' directory.")
     print ("\n\033[31mWarning: Previous reports will be overwritten! \033[0m\n")
