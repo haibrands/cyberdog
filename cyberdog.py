@@ -82,7 +82,7 @@ def nmap_scan_synscan(ip): #SYN (Stealth) Scan, default and popular scan. It's q
     scan = "nmap -sS"
     print ('\n' + waiting(scan))
     cmd = "nmap -sS " + ip
-    output = subprocess.check_output(cmd, shell = True)
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"syn_scan")
@@ -91,7 +91,7 @@ def nmap_scan_allports(ip): #All Ports Scan, scans all ports.
     scan = "nmap -p-"
     print (waiting(scan))
     cmd = "nmap " + ip + " -p-"
-    output = subprocess.check_output(cmd, shell = True)
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"all_ports_scan")
@@ -100,7 +100,7 @@ def nmap_scan_serviceversion(ip): #Service-version, Default Scripts, OS Scan, us
     scan = "nmap -sV -sC -O -p 111,222,333"
     print (waiting(scan))
     cmd = "nmap " + ip + " -sV -sC -O -p 111,222,333"
-    output = subprocess.check_output(cmd, shell = True)
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"service_version_os_scan")
@@ -109,7 +109,7 @@ def nmap_scan_udp(ip): #UDP Scan, scans for UDP ports.
     scan = "nmap -sU"
     print (waiting(scan))
     cmd = "nmap --top-ports 50 " + ip + " -sU"
-    output = subprocess.check_output(cmd, shell = True)
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"udp_scan")
@@ -118,7 +118,7 @@ def nmap_scan_tcp(ip): #TCP Scan, scans for TCP ports.
     scan = "nmap -sT"
     print (waiting(scan))
     cmd = "nmap " + ip + " -sT"
-    output = subprocess.check_output(cmd, shell = True)
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"tcp_scan")
@@ -126,15 +126,15 @@ def nmap_scan_tcp(ip): #TCP Scan, scans for TCP ports.
 def nikto_scan(ip): #Nikto Scan, used for webservers to find dangerous files/CGIs, outdated server software and other problems.
     print (waiting("nikto"))
     cmd = "nikto -h http://" + ip
-    output = subprocess.check_output(cmd, shell = True)
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"nikto_scan")
 
 def dirb_scan(ip): #DirBuster Scan, directory buster scan for web servers. 
     print (waiting("dirb"))
-    cmd = "dirb http://" + ip + " -r"
-    output = subprocess.check_output(cmd, shell = True)
+    cmd = "dirb http://" + ip + " -r -S"
+    output = subprocess.Popen(cmd, shell = True, stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     change_output = str(output)
     x = change_output.replace('\\n','\n')
     individual_scans(x,"dirb_scan")
