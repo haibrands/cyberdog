@@ -7,7 +7,7 @@ import subprocess
 
 ###############################################################################################################
 # [Title]: cyberdog.py
-# [Author]: Katrina Tan + Brandon Hai
+# [Author]: Brandon Hai + Katrina Tan
 # [GitHub]: https://github.com/haibrands/cyberdog.git
 ###############################################################################################################
 # [Details]:
