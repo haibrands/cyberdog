@@ -5,7 +5,7 @@ It's intended use is for fun or to learn!
 
 # How to use:
 
-- Cyberdog is meant to be easy and intuitive, utilizing built in Kali Linux scans to help the user
+- Cyberdog is easy and intuitive, utilizing built in Kali Linux scans to help the user
 
 - Go to the main directory of the repository and download the cyberdog.py file
 - Open a terminal and unzip the downloaded file
