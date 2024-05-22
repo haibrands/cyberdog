@@ -1,7 +1,7 @@
 # Cyberdog:
 
 Your trusty companion, here to assist you in the reconnaissance of a target box or IP address. This is an entry level script designed to automate the reconnaissance stage of penetration testing.
-It's intended use is for fun or to learn!
+It's intended use case is for fun or to learn!
 
 # How to use:
 
